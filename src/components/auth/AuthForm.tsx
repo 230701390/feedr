@@ -65,7 +65,7 @@ export function AuthForm({ type, onSubmit }: AuthFormProps) {
       name: "",
       email: "",
       password: "",
-      role: "donor" as UserRole,
+      role: "donor", // Explicitly set to "donor" or "receiver"
       street1: "",
       street2: "",
       street3: "",
