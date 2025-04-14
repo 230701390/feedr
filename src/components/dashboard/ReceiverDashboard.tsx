@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { FoodCard } from "@/components/food/FoodCard";
 import { useAuth } from "@/context/AuthContext";
@@ -160,6 +159,14 @@ export function ReceiverDashboard() {
     }
   };
   
+  // Modified click handler for tab switch
+  const handleSwitchToAvailableTab = () => {
+    const availableTab = document.querySelector('[value="available"]') as HTMLElement;
+    if (availableTab) {
+      availableTab.click();
+    }
+  };
+  
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -266,7 +273,7 @@ export function ReceiverDashboard() {
               <Button 
                 className="mt-4" 
                 variant="secondary"
-                onClick={() => document.querySelector('[value="available"]')?.click()}
+                onClick={handleSwitchToAvailableTab}
               >
                 Find Available Food
               </Button>

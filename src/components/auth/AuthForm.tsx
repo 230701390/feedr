@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -28,7 +27,7 @@ const registerSchema = z.object({
       (val) => validatePassword(val),
       "Password must contain at least 1 uppercase letter and 1 special character"
     ),
-  role: z.enum(["donor", "receiver"], {
+  role: z.enum(["donor", "receiver"] as const, {
     required_error: "Please select a role",
   }),
   street1: z.string().min(3, "Address must be at least 3 characters"),
