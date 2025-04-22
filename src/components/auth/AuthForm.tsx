@@ -30,6 +30,7 @@ const registerSchema = z.object({
   role: z.enum(["donor", "receiver", "admin"] as const, {
     required_error: "Please select a role",
   }),
+  adminCode: z.string().optional(),
   street1: z.string().min(3, "Address must be at least 3 characters"),
   street2: z.string().optional(),
   street3: z.string().optional(),
@@ -66,6 +67,7 @@ export function AuthForm({ type, onSubmit }: AuthFormProps) {
       email: "",
       password: "",
       role: "donor", // Explicitly set to "donor" or "receiver"
+      adminCode: "",
       street1: "",
       street2: "",
       street3: "",
@@ -106,6 +108,7 @@ export function AuthForm({ type, onSubmit }: AuthFormProps) {
           email: registerData.email,
           password: registerData.password,
           role: registerData.role,
+          adminCode: registerData.role === "admin" ? registerData.adminCode : undefined,
           address: {
             street1: registerData.street1,
             street2: registerData.street2 || undefined,
@@ -284,6 +287,29 @@ export function AuthForm({ type, onSubmit }: AuthFormProps) {
             />
           </div>
           
+          {registerForm.watch("role") === "admin" && (
+            <FormField
+              control={registerForm.control}
+              name="adminCode"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Admin Code</FormLabel>
+                  <FormControl>
+                    <Input 
+                      placeholder="Enter admin code" 
+                      {...field} 
+                      type="password"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                  <p className="text-xs text-muted-foreground">
+                    Enter the secret admin registration code
+                  </p>
+                </FormItem>
+              )}
+            />
+          )}
+
           <div className="space-y-2">
             <h3 className="font-medium">Address</h3>
             
