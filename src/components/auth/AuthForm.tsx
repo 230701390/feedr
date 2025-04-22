@@ -21,6 +21,9 @@ const loginSchema = z.object({
 const registerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Please enter a valid email address"),
+  mobile: z.string()
+    .min(10, "Mobile number must be at least 10 digits")
+    .regex(/^[0-9]+$/, "Mobile number must contain only digits"),
   password: z.string()
     .min(6, "Password must be at least 6 characters")
     .refine(
@@ -65,6 +68,7 @@ export function AuthForm({ type, onSubmit }: AuthFormProps) {
     defaultValues: {
       name: "",
       email: "",
+      mobile: "",
       password: "",
       role: "donor", // Explicitly set to "donor" or "receiver"
       adminCode: "",
@@ -106,6 +110,7 @@ export function AuthForm({ type, onSubmit }: AuthFormProps) {
         const formattedData = {
           name: registerData.name,
           email: registerData.email,
+          mobile: registerData.mobile,
           password: registerData.password,
           role: registerData.role,
           adminCode: registerData.role === "admin" ? registerData.adminCode : undefined,
@@ -221,6 +226,27 @@ export function AuthForm({ type, onSubmit }: AuthFormProps) {
             
             <FormField
               control={registerForm.control}
+              name="mobile"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Mobile Number</FormLabel>
+                  <FormControl>
+                    <Input 
+                      placeholder="1234567890" 
+                      {...field} 
+                      type="tel"
+                      maxLength={15}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <FormField
+              control={registerForm.control}
               name="email"
               render={({ field }) => (
                 <FormItem>
@@ -236,9 +262,7 @@ export function AuthForm({ type, onSubmit }: AuthFormProps) {
                 </FormItem>
               )}
             />
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
             <FormField
               control={registerForm.control}
               name="password"
@@ -259,7 +283,9 @@ export function AuthForm({ type, onSubmit }: AuthFormProps) {
                 </FormItem>
               )}
             />
-            
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={registerForm.control}
               name="role"
@@ -285,30 +311,30 @@ export function AuthForm({ type, onSubmit }: AuthFormProps) {
                 </FormItem>
               )}
             />
+            
+            {registerForm.watch("role") === "admin" && (
+              <FormField
+                control={registerForm.control}
+                name="adminCode"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Admin Code</FormLabel>
+                    <FormControl>
+                      <Input 
+                        placeholder="Enter admin code" 
+                        {...field} 
+                        type="password"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                    <p className="text-xs text-muted-foreground">
+                      Enter the secret admin registration code
+                    </p>
+                  </FormItem>
+                )}
+              />
+            )}
           </div>
-          
-          {registerForm.watch("role") === "admin" && (
-            <FormField
-              control={registerForm.control}
-              name="adminCode"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Admin Code</FormLabel>
-                  <FormControl>
-                    <Input 
-                      placeholder="Enter admin code" 
-                      {...field} 
-                      type="password"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                  <p className="text-xs text-muted-foreground">
-                    Enter the secret admin registration code
-                  </p>
-                </FormItem>
-              )}
-            />
-          )}
 
           <div className="space-y-2">
             <h3 className="font-medium">Address</h3>

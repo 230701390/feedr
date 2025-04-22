@@ -7,6 +7,7 @@ export type User = {
   id: string;
   name: string;
   email: string;
+  mobile: string;
   role: UserRole;
   points?: number; // For reward system
   address?: {

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
@@ -250,10 +249,19 @@ export function AdminDashboard() {
                       Food Name
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                      Description
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                       Donor
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                      Quantity
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                       Location
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                      Listed On
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                       Expiry
@@ -273,11 +281,25 @@ export function AdminDashboard() {
                         <td className="px-6 py-4 whitespace-nowrap text-sm">
                           {food.name}
                         </td>
+                        <td className="px-6 py-4 text-sm max-w-xs">
+                          <div className="truncate">
+                            {food.description}
+                          </div>
+                        </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm">
                           {food.donorName}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm">
-                          {food.address.city}
+                          {food.quantity} {food.unit}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                          <div className="flex flex-col">
+                            <span>{food.address.street1}</span>
+                            <span className="text-muted-foreground">{food.address.city}</span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                          {new Date(food.createdAt).toLocaleDateString()}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm">
                           {new Date(food.expiresAt).toLocaleString()}
