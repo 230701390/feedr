@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -27,11 +26,13 @@ export type User = {
 type AuthContextType = {
   user: User | null;
   login: (email: string, password: string) => Promise<void>;
-  register: (userData: Omit<User, "id"> & { password: string }) => Promise<void>;
+  register: (userData: Omit<User, "id"> & { password: string, adminCode?: string }) => Promise<void>;
   logout: () => void;
   isAuthenticated: boolean;
   updateUser: (userData: Partial<User>) => void;
 };
+
+const ADMIN_CODE = "FEEDR2025"; // This is the code you'll need to use to register as admin
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -71,15 +72,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     navigate("/dashboard");
   };
   
-  const register = async (userData: Omit<User, "id"> & { password: string }) => {
-    // In a real app, this would be an API call
-    // For now, we'll mock this with localStorage
+  const register = async (userData: Omit<User, "id"> & { password: string; adminCode?: string }) => {
     const storedUsers = localStorage.getItem("feedr-users");
     const users = storedUsers ? JSON.parse(storedUsers) : [];
     
     // Check if email already exists
     if (users.some((u: any) => u.email === userData.email)) {
       throw new Error("Email already in use");
+    }
+    
+    // Check admin registration
+    if (userData.role === "admin" && userData.adminCode !== ADMIN_CODE) {
+      throw new Error("Invalid admin registration");
     }
     
     const newUser = {
@@ -92,7 +96,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem("feedr-users", JSON.stringify(users));
     
     // Auto login after registration
-    const { password: _, ...userWithoutPassword } = newUser;
+    const { password: _, adminCode: __, ...userWithoutPassword } = newUser;
     setUser(userWithoutPassword);
     localStorage.setItem("feedr-user", JSON.stringify(userWithoutPassword));
     
