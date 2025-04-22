@@ -27,7 +27,7 @@ const registerSchema = z.object({
       (val) => validatePassword(val),
       "Password must contain at least 1 uppercase letter and 1 special character"
     ),
-  role: z.enum(["donor", "receiver"] as const, {
+  role: z.enum(["donor", "receiver", "admin"] as const, {
     required_error: "Please select a role",
   }),
   street1: z.string().min(3, "Address must be at least 3 characters"),
@@ -275,6 +275,7 @@ export function AuthForm({ type, onSubmit }: AuthFormProps) {
                     <SelectContent>
                       <SelectItem value="donor">Donate Food</SelectItem>
                       <SelectItem value="receiver">Receive Food</SelectItem>
+                      <SelectItem value="admin">Manage Platform</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
