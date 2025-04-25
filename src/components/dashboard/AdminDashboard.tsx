@@ -1,11 +1,12 @@
+
 import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Search, Users, ShoppingBag, Clock, AlertTriangle, Check, X } from "lucide-react";
+import { Search, Users, ShoppingBag, Clock, AlertTriangle, Check, X, Mail, Shield } from "lucide-react";
 import { FoodItem } from "@/utils/mockData";
-import { UserRole } from "@/context/AuthContext";
+import { UserRole, User } from "@/context/AuthContext";
 import { DataTable } from "@/components/ui/table";
 
 export function AdminDashboard() {
@@ -25,6 +26,7 @@ export function AdminDashboard() {
             ...food,
             expiresAt: new Date(food.expiresAt),
             createdAt: new Date(food.createdAt),
+            unit: food.unit || "items" // Add default value for unit
           }));
           setFoods(parsedFoods);
         }
@@ -51,9 +53,13 @@ export function AdminDashboard() {
         (user) =>
           user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
           user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          (user.mobile && user.mobile.includes(searchQuery)) ||
           (user.address?.city && user.address.city.toLowerCase().includes(searchQuery.toLowerCase()))
       )
     : users;
+  
+  // Get donors for more detailed view
+  const donors = users.filter(user => user.role === "donor");
   
   // Get counts for dashboard
   const donorCount = users.filter((user) => user.role === "donor").length;
@@ -158,8 +164,9 @@ export function AdminDashboard() {
       
       {/* Main content */}
       <Tabs defaultValue="users">
-        <TabsList className="grid grid-cols-2 mb-6">
-          <TabsTrigger value="users">Users</TabsTrigger>
+        <TabsList className="grid grid-cols-3 mb-6">
+          <TabsTrigger value="users">All Users</TabsTrigger>
+          <TabsTrigger value="donors">Donors</TabsTrigger>
           <TabsTrigger value="foods">Food Listings</TabsTrigger>
         </TabsList>
         
@@ -195,6 +202,9 @@ export function AdminDashboard() {
                       Email
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                      Mobile
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                       Role
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
@@ -215,6 +225,9 @@ export function AdminDashboard() {
                         {user.email}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
+                        {user.mobile || "—"}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">
                         <RoleBadge role={user.role} />
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
@@ -225,6 +238,85 @@ export function AdminDashboard() {
                       </td>
                     </tr>
                   ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </TabsContent>
+        
+        <TabsContent value="donors" className="space-y-6">
+          {loading ? (
+            <div className="text-center py-12">
+              <div className="animate-pulse flex flex-col items-center">
+                <div className="h-12 w-12 bg-muted rounded-full mb-4"></div>
+                <div className="h-4 w-48 bg-muted rounded mb-2"></div>
+                <div className="h-3 w-36 bg-muted rounded"></div>
+              </div>
+            </div>
+          ) : (
+            <div className="rounded-md border">
+              <table className="min-w-full divide-y divide-border">
+                <thead>
+                  <tr className="bg-muted/50">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                      Donor Name
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                      Email
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                      Mobile
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                      Address
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                      City
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                      Points Earned
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                      Donations
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-card divide-y divide-border">
+                  {donors.map((donor) => {
+                    // Count donations from this donor
+                    const donorFoods = foods.filter(food => food.donorId === donor.id);
+                    
+                    return (
+                      <tr key={donor.id} className="hover:bg-muted/50">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                          {donor.name}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                          <div className="flex items-center">
+                            <Mail className="h-3.5 w-3.5 mr-1.5 text-muted-foreground" />
+                            {donor.email}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                          {donor.mobile || "—"}
+                        </td>
+                        <td className="px-6 py-4 text-sm">
+                          {donor.address?.street1 || "—"}
+                          {donor.address?.street2 && <span>, {donor.address.street2}</span>}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                          {donor.address?.city || "—"} 
+                          {donor.address?.pincode && <span>, {donor.address.pincode}</span>}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                          <span className="font-bold text-feedr">{donor.points || 0}</span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                          <span className="font-medium">{donorFoods.length}</span>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
@@ -290,7 +382,7 @@ export function AdminDashboard() {
                           {food.donorName}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm">
-                          {food.quantity} {food.unit}
+                          {food.quantity} {food.unit || "items"}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm">
                           <div className="flex flex-col">
