@@ -20,7 +20,7 @@ const Register = () => {
         description: error instanceof Error ? error.message : "Something went wrong",
         variant: "destructive",
       });
-      throw error; // Re-throw to let the form handle the error state
+      throw error;
     }
   };
 
@@ -34,7 +34,7 @@ const Register = () => {
             <Shield className="h-4 w-4 text-purple-500" />
             <AlertTitle>Admin Registration Information</AlertTitle>
             <AlertDescription className="text-sm">
-              To register as an admin, select "Manage Platform" role and use the admin code: <strong className="font-mono">FEEDR2025</strong>
+              To register as an admin, select "Manage Platform" role and enter the provided admin code in the form below.
             </AlertDescription>
           </Alert>
           
