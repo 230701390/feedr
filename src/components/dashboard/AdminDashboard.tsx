@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
@@ -64,24 +63,31 @@ export function AdminDashboard() {
   // Get counts for dashboard
   const donorCount = users.filter((user) => user.role === "donor").length;
   const receiverCount = users.filter((user) => user.role === "receiver").length;
+  
+  // Helper function to check if a food item is expired
+  const isExpired = (food: FoodItem) => new Date() > new Date(food.expiresAt);
+
+  // Update activeFoodCount calculation
   const activeFoodCount = foods.filter(
-    (food) => !food.isClaimed && new Date() < new Date(food.expiresAt)
+    (food) => !food.isClaimed && !isExpired(food)
   ).length;
+
   const claimedFoodCount = foods.filter((food) => food.isClaimed).length;
   const expiredFoodCount = foods.filter(
-    (food) => !food.isClaimed && new Date() > new Date(food.expiresAt)
+    (food) => !food.isClaimed && isExpired(food)
   ).length;
   
-  // Filter foods by search query
+  // Filter foods by search query and remove expired ones
   const filteredFoods = searchQuery
     ? foods.filter(
         (food) =>
-          food.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          !isExpired(food) &&
+          (food.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
           food.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
           food.donorName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          food.address.city.toLowerCase().includes(searchQuery.toLowerCase())
+          food.address.city.toLowerCase().includes(searchQuery.toLowerCase()))
       )
-    : foods;
+    : foods.filter(food => !isExpired(food));
   
   return (
     <div className="space-y-6">
