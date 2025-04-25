@@ -6,6 +6,7 @@ export type FoodItem = {
   name: string;
   description: string;
   quantity: number;
+  unit?: string; // Adding the unit property as optional
   expiresAt: Date;
   imageUrl: string;
   donorId: string;
