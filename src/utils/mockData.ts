@@ -1,4 +1,3 @@
-
 import { User, UserRole } from "../context/AuthContext";
 
 export type FoodItem = {
@@ -6,7 +5,7 @@ export type FoodItem = {
   name: string;
   description: string;
   quantity: number;
-  unit?: string; // Adding the unit property as optional
+  unit?: string;
   expiresAt: Date;
   imageUrl: string;
   donorId: string;
@@ -107,73 +106,6 @@ export const initializeMockData = (): void => {
 
   if (!localStorage.getItem("feedr-users")) {
     const mockUsers = [
-      {
-        id: "user-1",
-        name: "Green Grocers",
-        email: "green@grocers.com",
-        password: "Grocers@123",
-        role: "donor" as UserRole,
-        points: 100,
-        address: {
-          street1: "123 Vegetable Market",
-          city: "New Delhi",
-          pincode: "110001",
-        },
-        location: {
-          latitude: 28.6139,
-          longitude: 77.2090,
-        },
-      },
-      {
-        id: "user-2",
-        name: "Spice Kitchen",
-        email: "spice@kitchen.com",
-        password: "Spice@123",
-        role: "donor" as UserRole,
-        points: 75,
-        address: {
-          street1: "45 Food Street",
-          city: "New Delhi",
-          pincode: "110001",
-        },
-        location: {
-          latitude: 28.6129,
-          longitude: 77.2295,
-        },
-      },
-      {
-        id: "user-3",
-        name: "Fresh Bakery",
-        email: "fresh@bakery.com",
-        password: "Fresh@123",
-        role: "donor" as UserRole,
-        points: 50,
-        address: {
-          street1: "78 Baker Street",
-          city: "Bangalore",
-          pincode: "560001",
-        },
-        location: {
-          latitude: 12.9716,
-          longitude: 77.5946,
-        },
-      },
-      {
-        id: "user-4",
-        name: "Food NGO",
-        email: "food@ngo.org",
-        password: "NGO@123",
-        role: "receiver" as UserRole,
-        address: {
-          street1: "12 Charity Road",
-          city: "Mumbai",
-          pincode: "400001",
-        },
-        location: {
-          latitude: 19.0760,
-          longitude: 72.8777,
-        },
-      },
       {
         id: "user-5",
         name: "Admin User",
