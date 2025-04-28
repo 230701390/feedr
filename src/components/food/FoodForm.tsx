@@ -153,7 +153,7 @@ export function FoodForm({ onSubmit, userAddress }: FoodFormProps) {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-6 max-h-[80vh] overflow-y-auto pr-4">
       <div className="space-y-2">
         <h3 className="text-2xl font-bold">Donate Food</h3>
         <p className="text-muted-foreground">Share your excess food with those who need it</p>
