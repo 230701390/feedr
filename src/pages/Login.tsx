@@ -52,7 +52,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col relative animated-bg bg-gradient-subtle">
+    <div className="min-h-screen flex flex-col relative animated-bg bg-gradient-subtle login-page">
       <NavBar />
       
       {/* Animated wave background */}

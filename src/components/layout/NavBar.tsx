@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu";
 import { useState, useEffect } from "react";
+import { MenuButtons } from "./MenuButtons";
 
 export function NavBar() {
   const { user, logout } = useAuth();
@@ -42,8 +43,13 @@ export function NavBar() {
     }`}>
       <div className="container mx-auto flex items-center justify-between">
         <Link to="/" className="flex items-center space-x-2">
-          <span className="text-2xl font-bold text-indigo-500">Feedr</span>
+          <span className="text-2xl font-bold text-primary">Feedr</span>
         </Link>
+
+        {/* Show menu buttons on larger screens */}
+        <div className="hidden md:flex">
+          <MenuButtons />
+        </div>
 
         <div className="flex items-center space-x-4">
           {/* Mobile menu button */}
@@ -67,7 +73,7 @@ export function NavBar() {
                 {user.role === 'donor' && (
                   <div className="text-sm font-medium mr-2">
                     <span className="text-muted-foreground">Points: </span>
-                    <span className="text-indigo-500">{user.points}</span>
+                    <span className="text-primary">{user.points}</span>
                   </div>
                 )}
                 
@@ -107,7 +113,7 @@ export function NavBar() {
               variant="ghost" 
               size="icon" 
               onClick={toggleTheme}
-              className="text-indigo-500"
+              className="text-primary"
             >
               {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </Button>
@@ -142,6 +148,11 @@ export function NavBar() {
             </Link>
           </div>
         )}
+        
+        {/* Include menu buttons in mobile menu */}
+        <div className="mt-4 pt-4 border-t border-border">
+          <MenuButtons />
+        </div>
       </div>
     </nav>
   );

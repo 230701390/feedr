@@ -5,60 +5,60 @@
 
 @layer base {
   :root {
-    /* Light theme variables with more subtle colors */
+    /* Light theme variables with subtle red tones */
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 245 46% 50%;  /* Indigo shade, more subtle than bright red */
+    --primary: 2 56% 60%;  /* Subtle red shade */
     --primary-foreground: 0 0% 100%;
-    --secondary: 220 14% 96%;
+    --secondary: 350 10% 96%;
     --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
+    --muted: 350 10% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 245 30% 95%;
+    --accent: 350 20% 95%;
     --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 245 46% 50%;
+    --ring: 2 56% 60%;
     --radius: 0.5rem;
-    --feedr: 245 46% 50%;  /* Changed from red to indigo */
+    --feedr: 2 56% 60%;  /* Changed to subtle red */
     --feedr-foreground: 0 0% 100%;
-    --feedr-muted: 245 46% 96%;
-    --feedr-muted-foreground: 245 46% 40%;
-    --feedr-accent: 245 46% 90%;
+    --feedr-muted: 2 56% 96%;
+    --feedr-muted-foreground: 2 56% 40%;
+    --feedr-accent: 2 56% 90%;
   }
 
   .dark {
-    /* Dark theme variables with more subtle colors */
+    /* Dark theme variables with subtle red tones */
     --background: 220 10% 10%;
     --foreground: 210 40% 98%;
     --card: 220 10% 15%;
     --card-foreground: 210 40% 98%;
     --popover: 220 10% 15%;
     --popover-foreground: 210 40% 98%;
-    --primary: 245 30% 60%;  /* Indigo shade for dark mode */
+    --primary: 2 46% 50%;  /* Darker subtle red for dark mode */
     --primary-foreground: 0 0% 100%;
     --secondary: 220 10% 20%;
     --secondary-foreground: 210 40% 98%;
     --muted: 220 10% 20%;
     --muted-foreground: 215 20.2% 65.1%;
-    --accent: 245 20% 25%;
+    --accent: 2 20% 25%;
     --accent-foreground: 210 40% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
     --border: 220 10% 20%;
     --input: 220 10% 20%;
-    --ring: 245 30% 60%;
-    --feedr: 245 30% 60%;  /* Changed from red to indigo */
+    --ring: 2 46% 50%;
+    --feedr: 2 46% 50%;  /* Changed to subtle red */
     --feedr-foreground: 0 0% 100%;
-    --feedr-muted: 245 30% 30%;
-    --feedr-muted-foreground: 245 30% 80%;
-    --feedr-accent: 245 30% 40%;
+    --feedr-muted: 2 40% 30%;
+    --feedr-muted-foreground: 2 40% 80%;
+    --feedr-accent: 2 40% 40%;
   }
 }
 
@@ -106,7 +106,12 @@
   }
   
   .bg-gradient-subtle {
-    @apply bg-gradient-to-br from-indigo-50 via-purple-50 to-blue-50 dark:from-indigo-950/40 dark:via-purple-950/30 dark:to-blue-950/40;
+    @apply bg-gradient-to-br from-red-50/80 via-orange-50/80 to-amber-50/80 dark:from-red-950/40 dark:via-orange-950/30 dark:to-amber-950/40;
+  }
+
+  /* Food-themed backgrounds */
+  .bg-food-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill-rule='evenodd'%3E%3Cg id='church-on-sunday' fill='%23ff8a65' fill-opacity='0.1'%3E%3Cpath d='M77.17 0H80v2.83l-.1.1A39.9 39.9 0 0 1 74.64 20a39.9 39.9 0 0 1 5.24 17.06l.11.11v2.89c-.01 6.9-1.8 13.79-5.35 19.94A39.96 39.96 0 0 1 80 79.94V80h-2.83L66.84 69.66a39.83 39.83 0 0 1-24.1 10.25l.09.09h-5.66l.1-.1c-8.7-.58-17.22-4-24.1-10.23L2.82 80H0V79.94c.01-6.9 1.8-13.8 5.35-19.94A39.96 39.96 0 0 1 0 40.06V37.17l.1-.1A39.9 39.9 0 0 1 5.36 20 39.9 39.9 0 0 1 .1 2.94L0 2.83V0h2.83l-.1.1a39.83 39.83 0 0 1 24.1 10.24L37.17 0H40c0 6.92-1.78 13.83-5.35 20A39.96 39.96 0 0 1 40 40c0-6.92 1.78-13.83 5.35-20A39.96 39.96 0 0 1 40 0h2.83l10.33 10.34A39.83 39.83 0 0 1 77.26.09L77.17 0z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   }
 }
 
@@ -129,6 +134,35 @@ body {
   padding-top: 70px;
 }
 
+/* Food-themed background for all pages */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' opacity='0.15' viewBox='0 0 80 80'%3E%3Cpath d='M30 10c-2 0-4 2-4 4v20c0 2 2 4 4 4h20c2 0 4-2 4-4V14c0-2-2-4-4-4H30zm0 28v10c0 8.8 7.2 16 16 16s16-7.2 16-16V38H30zm32 0v10c0 6-3 11.6-7.9 14.9C58 59.6 60 56.1 60 52V38h2z' fill='%23ff8a65'/%3E%3Cpath d='M12 0h8v8h-8zm12 0h8v8h-8zm12 0h8v8h-8zm12 0h8v8h-8zm12 0h8v8h-8zM0 12h8v8H0zm12 0h8v8h-8zm12 0h8v8h-8zm12 0h8v8h-8zm12 0h8v8h-8zM12 24h8v8h-8zm12 0h8v8h-8zm12 0h8v8h-8zm12 0h8v8h-8zM0 36h8v8H0zm12 0h8v8h-8zm12 0h8v8h-8zm12 0h8v8h-8zm12 0h8v8h-8zM12 48h8v8h-8zm12 0h8v8h-8zm12 0h8v8h-8zm12 0h8v8h-8zM0 60h8v8H0zm12 0h8v8h-8zm12 0h8v8h-8zm12 0h8v8h-8zm12 0h8v8h-8zM12 72h8v8h-8zm12 0h8v8h-8zm12 0h8v8h-8zm12 0h8v8h-8z' fill='%23ff8a65' fill-opacity='0.1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 120px 120px;
+  opacity: 0.25;
+}
+
+/* Login page specific food-themed background overlay */
+.login-page::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='96' viewBox='0 0 60 96'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ff8a65' fill-opacity='0.1'%3E%3Cpath d='M36 10a6 6 0 0 1 12 0v12a6 6 0 0 1-12 0V10zm24 78a6 6 0 0 1-6 6h-3v3a6 6 0 0 1-12 0v-3h-3a6 6 0 0 1-6-6v-3a6 6 0 0 1 12 0h3a6 6 0 0 1 12 0v3zm-30-48a6 6 0 0 1-6-6V10a6 6 0 0 1 12 0v12a6 6 0 0 1-6 6zm-12 24a6 6 0 0 1 6-6h3v-3a6 6 0 0 1 12 0v3h3a6 6 0 0 1 6 6v3a6 6 0 0 1-12 0h-3a6 6 0 0 1-12 0v-3z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  background-size: 120px 120px;
+  opacity: 0.2;
+}
+
 /* Animated wave effect */
 .wave-container {
   position: absolute;
@@ -146,7 +180,7 @@ body {
   left: 0;
   width: 100%;
   height: 100px;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23a5b4fc" fill-opacity="0.4" d="M0,192L48,176C96,160,192,128,288,128C384,128,480,160,576,192C672,224,768,256,864,245.3C960,235,1056,181,1152,144C1248,107,1344,85,1392,74.7L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ff8a65" fill-opacity="0.4" d="M0,192L48,176C96,160,192,128,288,128C384,128,480,160,576,192C672,224,768,256,864,245.3C960,235,1056,181,1152,144C1248,107,1344,85,1392,74.7L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
   background-size: 1440px 100px;
   animation: wave-animation 10s linear infinite;
 }
