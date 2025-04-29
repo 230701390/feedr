@@ -39,7 +39,7 @@ export function NavBar() {
 
   return (
     <nav className={`w-full py-4 px-6 fixed top-0 z-50 transition-all duration-300 ${
-      scrolled ? "bg-card/80 shadow-sm backdrop-blur-md" : "bg-transparent"
+      scrolled ? "bg-card/40 backdrop-blur-md shadow-sm" : "bg-transparent"
     }`}>
       <div className="container mx-auto flex items-center justify-between">
         <Link to="/" className="flex items-center space-x-2">
@@ -67,7 +67,7 @@ export function NavBar() {
             {user ? (
               <>
                 <Link to="/dashboard">
-                  <Button variant="ghost">Dashboard</Button>
+                  <Button variant="ghost" className="bg-white/10 hover:bg-white/20 dark:bg-black/10 dark:hover:bg-black/20">Dashboard</Button>
                 </Link>
                 
                 {user.role === 'donor' && (
@@ -79,11 +79,11 @@ export function NavBar() {
                 
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon">
+                    <Button variant="ghost" size="icon" className="bg-white/10 hover:bg-white/20 dark:bg-black/10 dark:hover:bg-black/20">
                       <User className="h-5 w-5" />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
+                  <DropdownMenuContent align="end" className="glass dark:glass-dark">
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
@@ -100,11 +100,11 @@ export function NavBar() {
             ) : (
               <>
                 <Link to="/login">
-                  <Button variant="outline">Login</Button>
+                  <Button variant="outline" className="bg-white/10 hover:bg-white/20 dark:bg-black/10 dark:hover:bg-black/20">Login</Button>
                 </Link>
                 
                 <Link to="/register">
-                  <Button>Register</Button>
+                  <Button className="bg-primary/80 hover:bg-primary/90">Register</Button>
                 </Link>
               </>
             )}
@@ -113,7 +113,7 @@ export function NavBar() {
               variant="ghost" 
               size="icon" 
               onClick={toggleTheme}
-              className="text-primary"
+              className="text-primary bg-white/10 hover:bg-white/20 dark:bg-black/10 dark:hover:bg-black/20"
             >
               {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </Button>
@@ -121,36 +121,36 @@ export function NavBar() {
         </div>
       </div>
 
-      {/* Mobile menu dropdown */}
-      <div className={`md:hidden ${mobileMenuOpen ? "block" : "hidden"} mt-4 bg-card rounded-lg shadow-lg p-4 transition-all`}>
+      {/* Mobile menu dropdown with glass effect */}
+      <div className={`md:hidden ${mobileMenuOpen ? "block" : "hidden"} mt-4 glass dark:glass-dark rounded-lg shadow-lg p-4 transition-all`}>
         {user ? (
           <div className="flex flex-col space-y-3">
-            <Link to="/dashboard" className="px-4 py-2 hover:bg-accent rounded-md">
+            <Link to="/dashboard" className="px-4 py-2 hover:bg-white/10 dark:hover:bg-black/20 rounded-md">
               Dashboard
             </Link>
-            <Link to="/profile" className="px-4 py-2 hover:bg-accent rounded-md">
+            <Link to="/profile" className="px-4 py-2 hover:bg-white/10 dark:hover:bg-black/20 rounded-md">
               Profile
             </Link>
             <button 
               onClick={logout}
-              className="flex items-center px-4 py-2 hover:bg-accent rounded-md text-left"
+              className="flex items-center px-4 py-2 hover:bg-white/10 dark:hover:bg-black/20 rounded-md text-left"
             >
               <LogOut className="mr-2 h-4 w-4" /> Logout
             </button>
           </div>
         ) : (
           <div className="flex flex-col space-y-3">
-            <Link to="/login" className="px-4 py-2 hover:bg-accent rounded-md">
+            <Link to="/login" className="px-4 py-2 hover:bg-white/10 dark:hover:bg-black/20 rounded-md">
               Login
             </Link>
-            <Link to="/register" className="px-4 py-2 hover:bg-accent rounded-md">
+            <Link to="/register" className="px-4 py-2 hover:bg-white/10 dark:hover:bg-black/20 rounded-md">
               Register
             </Link>
           </div>
         )}
         
         {/* Include menu buttons in mobile menu */}
-        <div className="mt-4 pt-4 border-t border-border">
+        <div className="mt-4 pt-4 border-t border-white/20 dark:border-white/10">
           <MenuButtons />
         </div>
       </div>
