@@ -22,9 +22,9 @@ export function MenuButtons() {
             <ul className="grid gap-3 p-6 w-[400px] md:grid-cols-2">
               <li className="row-span-3">
                 <NavigationMenuLink asChild>
-                  <a
+                  <Link
                     className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-indigo-100 to-indigo-50 dark:from-indigo-900/20 dark:to-indigo-800/20 p-6 no-underline outline-none focus:shadow-md"
-                    href="/about"
+                    to="/"
                   >
                     <div className="mb-2 mt-4 text-lg font-medium">
                       Our Mission
@@ -32,16 +32,16 @@ export function MenuButtons() {
                     <p className="text-sm leading-tight text-muted-foreground">
                       We aim to reduce food waste and feed those in need through our platform.
                     </p>
-                  </a>
+                  </Link>
                 </NavigationMenuLink>
               </li>
-              <ListItem href="/team" title="Our Team">
+              <ListItem to="/" title="Our Team">
                 Meet the passionate individuals behind Feedr
               </ListItem>
-              <ListItem href="/impact" title="Our Impact">
+              <ListItem to="/" title="Our Impact">
                 See how we're making a difference in communities
               </ListItem>
-              <ListItem href="/partners" title="Our Partners">
+              <ListItem to="/" title="Our Partners">
                 Organizations we collaborate with to expand our reach
               </ListItem>
             </ul>
@@ -52,13 +52,13 @@ export function MenuButtons() {
           <NavigationMenuTrigger className="bg-accent/50 hover:bg-accent/80">Get Involved</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid gap-3 p-6 w-[400px] md:grid-cols-1">
-              <ListItem href="/donate" title="Donate Food">
+              <ListItem to="/" title="Donate Food">
                 Learn how to contribute excess food to those in need
               </ListItem>
-              <ListItem href="/receive" title="Receive Food">
+              <ListItem to="/" title="Receive Food">
                 Find out how to receive food donations in your area
               </ListItem>
-              <ListItem href="/volunteer" title="Volunteer">
+              <ListItem to="/" title="Volunteer">
                 Help us distribute food and manage collections
               </ListItem>
             </ul>
@@ -85,13 +85,14 @@ const ListItem = React.forwardRef<
   React.ElementRef<"a">,
   React.ComponentPropsWithoutRef<"a"> & {
     title: string;
+    to: string;
   }
->(({ className, title, children, ...props }, ref) => {
+>(({ className, title, children, to, ...props }, ref) => {
   return (
     <li>
       <NavigationMenuLink asChild>
-        <a
-          ref={ref}
+        <Link
+          to={to}
           className={cn(
             "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
             className
@@ -102,7 +103,7 @@ const ListItem = React.forwardRef<
           <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
             {children}
           </p>
-        </a>
+        </Link>
       </NavigationMenuLink>
     </li>
   );

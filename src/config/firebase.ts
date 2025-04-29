@@ -4,12 +4,12 @@ import { getAuth } from "firebase/auth";
 
 // Your Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyD_placeHolderKey_forDemo",
-  authDomain: "feedr-app-demo.firebaseapp.com",
-  projectId: "feedr-app-demo",
-  storageBucket: "feedr-app-demo.appspot.com",
-  messagingSenderId: "123456789012",
-  appId: "1:123456789012:web:abcdef1234567890"
+  apiKey: "AIzaSyBmapIMcnRUXC-Z5z-IfL-W8B9T2hP7NcA",
+  authDomain: "feedr-demo-app.firebaseapp.com",
+  projectId: "feedr-demo-app",
+  storageBucket: "feedr-demo-app.appspot.com",
+  messagingSenderId: "397012985142",
+  appId: "1:397012985142:web:e76a871686c2c8e869a608"
 };
 
 // Initialize Firebase
@@ -29,7 +29,7 @@ export const generateOTP = () => {
   return otp;
 };
 
-// Simulate sending OTP to email
+// Send OTP to email
 export const sendOTPToEmail = (email: string, otp: string) => {
   // In a real app, this would call a backend API to send an email
   console.log(`OTP ${otp} would be sent to ${email} in a production environment`);

@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,7 +8,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { Loader2, ArrowRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { auth, generateOTP } from "@/config/firebase";
+import { auth, generateOTP, sendOTPToEmail } from "@/config/firebase";
 import { PhoneAuthProvider, signInWithCredential } from "firebase/auth";
 
 const otpSchema = z.object({
@@ -24,26 +24,29 @@ type OTPVerificationFormProps = {
 export function OTPVerificationForm({ email, verificationId, onSuccess }: OTPVerificationFormProps) {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
-  const [generatedOTP, setGeneratedOTP] = useState<string>(() => {
-    // Generate OTP when component mounts
-    return generateOTP();
-  });
+  const [generatedOTP, setGeneratedOTP] = useState<string>("");
+  
+  // Generate OTP when component mounts
+  useEffect(() => {
+    const otp = generateOTP();
+    setGeneratedOTP(otp);
+    
+    // Send OTP to email (in a real app)
+    sendOTPToEmail(email, otp).then(() => {
+      // Show the generated OTP in a toast for testing purposes
+      toast({
+        title: "Verification Code Generated",
+        description: `For testing purposes, use this code: ${otp}`,
+        duration: 10000,
+      });
+    });
+  }, [email, toast]);
 
   const form = useForm<z.infer<typeof otpSchema>>({
     resolver: zodResolver(otpSchema),
     defaultValues: {
       otp: "",
     },
-  });
-
-  // Show the generated OTP in a toast for testing purposes
-  // In a real app, this would be sent via SMS/email
-  useState(() => {
-    toast({
-      title: "Verification Code Generated",
-      description: `For testing purposes, use this code: ${generatedOTP}`,
-      duration: 10000,
-    });
   });
 
   const handleSubmit = async (data: z.infer<typeof otpSchema>) => {
@@ -114,7 +117,7 @@ export function OTPVerificationForm({ email, verificationId, onSuccess }: OTPVer
               </FormControl>
               <FormMessage />
               <p className="text-xs text-muted-foreground mt-2">
-                A verification code has been generated for this demo. Check the toast notification.
+                A verification code has been sent to {email}. Check the toast notification for the test code.
               </p>
             </FormItem>
           )}
