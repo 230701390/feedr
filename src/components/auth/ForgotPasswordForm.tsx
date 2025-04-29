@@ -31,8 +31,13 @@ export function ForgotPasswordForm({ onSuccess }: ForgotPasswordFormProps) {
   const handleSubmit = async (data: z.infer<typeof forgotPasswordSchema>) => {
     setLoading(true);
     try {
-      // In a real implementation, this would call an API endpoint
+      // In a real implementation, this would call an API endpoint to send OTP
       await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // For demo purposes, we'll generate a "predictable" OTP based on the email
+      // In a real implementation, this would be random and stored securely
+      const emailHash = data.email.slice(-6).padStart(6, '0');
+      console.log("Generated OTP for testing:", emailHash);
       
       // Validate email exists in the system (simulated)
       const emailExists = Math.random() > 0.1; // 90% chance of success for demo
@@ -44,7 +49,7 @@ export function ForgotPasswordForm({ onSuccess }: ForgotPasswordFormProps) {
       onSuccess(data.email);
       toast({
         title: "OTP Sent",
-        description: "A verification code has been sent to your email",
+        description: `A verification code has been sent to ${data.email}`,
       });
     } catch (error) {
       toast({

@@ -8,6 +8,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { Loader2, ArrowRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { auth } from "@/config/firebase";
+import { PhoneAuthProvider, signInWithCredential } from "firebase/auth";
 
 const otpSchema = z.object({
   otp: z.string().length(6, "OTP must be 6 digits"),
@@ -15,10 +17,11 @@ const otpSchema = z.object({
 
 type OTPVerificationFormProps = {
   email: string;
+  verificationId?: string;
   onSuccess: (token: string) => void;
 };
 
-export function OTPVerificationForm({ email, onSuccess }: OTPVerificationFormProps) {
+export function OTPVerificationForm({ email, verificationId, onSuccess }: OTPVerificationFormProps) {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
@@ -32,19 +35,37 @@ export function OTPVerificationForm({ email, onSuccess }: OTPVerificationFormPro
   const handleSubmit = async (data: z.infer<typeof otpSchema>) => {
     setLoading(true);
     try {
-      // In a real implementation, this would call an API endpoint
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Validate OTP (simulated)
-      const isOtpValid = data.otp === "123456" || Math.random() > 0.2; // Hardcoded test OTP or 80% chance of success
-      
-      if (!isOtpValid) {
-        throw new Error("Invalid or expired verification code");
+      // If we have a verificationId, use Firebase phone auth
+      if (verificationId) {
+        const credential = PhoneAuthProvider.credential(verificationId, data.otp);
+        await signInWithCredential(auth, credential);
+        const token = await auth.currentUser?.getIdToken();
+        onSuccess(token || "firebase-auth-token");
+        toast({
+          title: "Verification Successful",
+          description: "Your identity has been verified successfully."
+        });
+      } else {
+        // For email, we'll use a simulated approach for demo purposes
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        // Demo validation logic - in a real app, this would validate against a backend
+        // For demo, either "123456" or if the OTP equals the last 6 chars of the email
+        const emailCode = email.slice(-6).padStart(6, '0');
+        const isOtpValid = data.otp === "123456" || data.otp === emailCode;
+        
+        if (!isOtpValid) {
+          throw new Error("Invalid verification code");
+        }
+        
+        // Generate a token for password reset
+        const token = `reset-token-${Date.now()}`;
+        onSuccess(token);
+        toast({
+          title: "Verification Successful",
+          description: "Your identity has been verified successfully."
+        });
       }
-      
-      // Generate a token for password reset (simulated)
-      const token = `reset-token-${Date.now()}`;
-      onSuccess(token);
     } catch (error) {
       toast({
         title: "Verification Failed",
@@ -68,6 +89,8 @@ export function OTPVerificationForm({ email, onSuccess }: OTPVerificationFormPro
               <FormControl>
                 <InputOTP
                   maxLength={6}
+                  value={field.value}
+                  onChange={field.onChange}
                   render={({ slots }) => (
                     <InputOTPGroup>
                       {slots.map((slot, i) => (
@@ -75,7 +98,6 @@ export function OTPVerificationForm({ email, onSuccess }: OTPVerificationFormPro
                       ))}
                     </InputOTPGroup>
                   )}
-                  {...field}
                 />
               </FormControl>
               <FormMessage />
@@ -85,6 +107,7 @@ export function OTPVerificationForm({ email, onSuccess }: OTPVerificationFormPro
 
         <div className="text-xs text-muted-foreground mt-2">
           <p>For testing purposes, you can use "123456" as the verification code.</p>
+          <p>Or use the last 6 characters of your email if longer than 6 characters.</p>
         </div>
 
         <Button type="submit" className="w-full" disabled={loading}>

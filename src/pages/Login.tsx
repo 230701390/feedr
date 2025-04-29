@@ -52,11 +52,18 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col relative animated-bg bg-gradient-subtle">
       <NavBar />
       
+      {/* Animated wave background */}
+      <div className="wave-container">
+        <div className="wave"></div>
+        <div className="wave"></div>
+        <div className="wave"></div>
+      </div>
+      
       <main className="flex-1 flex items-center justify-center p-6">
-        <div className="w-full max-w-md">
+        <div className="w-full max-w-md bg-card/80 backdrop-blur-sm p-6 rounded-lg shadow-lg animate-fade-in">
           <AuthForm type="login" onSubmit={handleLogin} />
           
           <div className="mt-4 text-center space-y-2">
