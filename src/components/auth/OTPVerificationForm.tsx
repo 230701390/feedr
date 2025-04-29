@@ -8,7 +8,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { Loader2, ArrowRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { auth } from "@/config/firebase";
+import { auth, generateOTP } from "@/config/firebase";
 import { PhoneAuthProvider, signInWithCredential } from "firebase/auth";
 
 const otpSchema = z.object({
@@ -24,12 +24,26 @@ type OTPVerificationFormProps = {
 export function OTPVerificationForm({ email, verificationId, onSuccess }: OTPVerificationFormProps) {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const [generatedOTP, setGeneratedOTP] = useState<string>(() => {
+    // Generate OTP when component mounts
+    return generateOTP();
+  });
 
   const form = useForm<z.infer<typeof otpSchema>>({
     resolver: zodResolver(otpSchema),
     defaultValues: {
       otp: "",
     },
+  });
+
+  // Show the generated OTP in a toast for testing purposes
+  // In a real app, this would be sent via SMS/email
+  useState(() => {
+    toast({
+      title: "Verification Code Generated",
+      description: `For testing purposes, use this code: ${generatedOTP}`,
+      duration: 10000,
+    });
   });
 
   const handleSubmit = async (data: z.infer<typeof otpSchema>) => {
@@ -46,13 +60,11 @@ export function OTPVerificationForm({ email, verificationId, onSuccess }: OTPVer
           description: "Your identity has been verified successfully."
         });
       } else {
-        // For email, we'll use a simulated approach for demo purposes
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        // For email verification, check against our generated OTP
+        await new Promise(resolve => setTimeout(resolve, 1000));
         
-        // Demo validation logic - in a real app, this would validate against a backend
-        // For demo, either "123456" or if the OTP equals the last 6 chars of the email
-        const emailCode = email.slice(-6).padStart(6, '0');
-        const isOtpValid = data.otp === "123456" || data.otp === emailCode;
+        // Check if the entered OTP matches our generated one or use test codes
+        const isOtpValid = data.otp === generatedOTP || data.otp === "123456";
         
         if (!isOtpValid) {
           throw new Error("Invalid verification code");
@@ -101,14 +113,12 @@ export function OTPVerificationForm({ email, verificationId, onSuccess }: OTPVer
                 />
               </FormControl>
               <FormMessage />
+              <p className="text-xs text-muted-foreground mt-2">
+                A verification code has been generated for this demo. Check the toast notification.
+              </p>
             </FormItem>
           )}
         />
-
-        <div className="text-xs text-muted-foreground mt-2">
-          <p>For testing purposes, you can use "123456" as the verification code.</p>
-          <p>Or use the last 6 characters of your email if longer than 6 characters.</p>
-        </div>
 
         <Button type="submit" className="w-full" disabled={loading}>
           {loading ? (
