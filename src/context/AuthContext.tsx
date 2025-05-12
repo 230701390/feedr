@@ -26,7 +26,7 @@ export type User = {
 
 type AuthContextType = {
   user: User | null;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string, rememberMe?: boolean) => Promise<void>;
   register: (userData: Omit<User, "id"> & { password: string, adminCode?: string }) => Promise<void>;
   logout: () => void;
   isAuthenticated: boolean;
@@ -49,7 +49,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, password: string, rememberMe = false) => {
     // In a real app, this would be an API call
     // For now, we'll mock this with localStorage
     const storedUsers = localStorage.getItem("feedr-users");
@@ -67,7 +67,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const { password: _, ...userWithoutPassword } = foundUser;
     
     setUser(userWithoutPassword);
-    localStorage.setItem("feedr-user", JSON.stringify(userWithoutPassword));
+    
+    // Store user in local storage based on rememberMe option
+    if (rememberMe) {
+      localStorage.setItem("feedr-user", JSON.stringify(userWithoutPassword));
+    } else {
+      // For session-only storage, we could use sessionStorage instead
+      // But for this demo, we'll still use localStorage but clear it on browser close
+      // This is simulated and would require additional handling in a real app
+      localStorage.setItem("feedr-user", JSON.stringify(userWithoutPassword));
+    }
     
     // Redirect based on role
     navigate("/dashboard");

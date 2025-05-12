@@ -8,7 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Loader2 } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Loader2, Save } from "lucide-react";
 import { validatePassword, validateEmail, getCityFromPincode, commonCities } from "@/utils/validation";
 import { UserRole } from "@/context/AuthContext";
 
@@ -16,6 +17,7 @@ import { UserRole } from "@/context/AuthContext";
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
   password: z.string().min(1, "Password is required"),
+  rememberMe: z.boolean().default(false),
 });
 
 const registerSchema = z.object({
@@ -60,6 +62,7 @@ export function AuthForm({ type, onSubmit }: AuthFormProps) {
     defaultValues: {
       email: "",
       password: "",
+      rememberMe: false,
     },
   });
 
@@ -183,6 +186,26 @@ export function AuthForm({ type, onSubmit }: AuthFormProps) {
                 </FormItem>
               )}
             />
+            
+            <FormField
+              control={loginForm.control}
+              name="rememberMe"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md p-2">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>
+                      Remember me
+                    </FormLabel>
+                  </div>
+                </FormItem>
+              )}
+            />
 
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? (
@@ -191,7 +214,10 @@ export function AuthForm({ type, onSubmit }: AuthFormProps) {
                   Signing in...
                 </>
               ) : (
-                "Sign In"
+                <>
+                  <Save className="mr-2 h-4 w-4" />
+                  Sign In
+                </>
               )}
             </Button>
           </form>
