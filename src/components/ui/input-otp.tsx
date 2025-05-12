@@ -35,30 +35,19 @@ const InputOTPSlot = React.forwardRef<
 >(({ index, className, ...props }, ref) => {
   const inputOTPContext = React.useContext(OTPInputContext)
   
-  // Handle null or undefined context properly
-  if (!inputOTPContext) {
-    return (
-      <div 
-        ref={ref}
-        className={cn(
-          "relative flex h-10 w-10 items-center justify-center border border-input text-sm transition-all rounded-md",
-          className
-        )}
-        {...props}
-      />
-    )
-  }
-  
-  const slots = inputOTPContext.slots || [];
-  const slot = slots[index] || { char: "", hasFakeCaret: false, isActive: false };
-  const { char, hasFakeCaret, isActive } = slot;
+  const { char, hasFakeCaret, isActive } = React.useMemo(() => {
+    if (!inputOTPContext || !inputOTPContext.slots || index >= inputOTPContext.slots.length) {
+      return { char: "", hasFakeCaret: false, isActive: false }
+    }
+    return inputOTPContext.slots[index]
+  }, [inputOTPContext, index])
 
   return (
     <div
       ref={ref}
       className={cn(
-        "relative flex h-10 w-10 items-center justify-center border-y border-r border-input text-sm transition-all first:rounded-l-md first:border-l last:rounded-r-md",
-        isActive && "z-10 ring-2 ring-ring ring-offset-background",
+        "relative flex h-10 w-10 items-center justify-center border border-input bg-background text-sm transition-all rounded-md focus-within:ring-1 focus-within:ring-ring",
+        isActive && "ring-2 ring-ring ring-offset-background",
         className
       )}
       {...props}
